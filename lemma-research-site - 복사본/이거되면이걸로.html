@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>LEMMA Research Lab</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+
+body{
+background:#050505;
+color:#00ffe1;
+font-family:Consolas;
+margin:0;
+overflow-x:hidden;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+padding:20px;
+border-bottom:1px solid #00ffe1;
+}
+
+nav span{
+margin-right:20px;
+cursor:pointer;
+}
+
+nav span:hover{
+text-shadow:0 0 10px #00ffe1;
+}
+
+input{
+background:black;
+border:1px solid #00ffe1;
+color:#00ffe1;
+padding:5px;
+}
+
+.divisionGrid{
+display:grid;
+grid-template-columns:repeat(2,300px);
+gap:50px;
+justify-content:center;
+margin-top:50px;
+}
+
+.divisionCard{
+border:1px solid #00ffe1;
+padding:40px;
+font-size:24px;
+cursor:pointer;
+transition:0.3s;
+text-align:center;
+}
+
+.divisionCard:hover{
+box-shadow:0 0 20px #00ffe1;
+transform:scale(1.05);
+}
+
+.section{
+padding:50px;
+display:none;
+max-width:900px;
+margin:0 auto;
+}
+
+.connecting{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-size:28px;
+z-index:999;
+}
+
+.loader{
+width:300px;
+height:4px;
+background:#111;
+margin-top:20px;
+overflow:hidden;
+}
+
+.bar{
+height:100%;
+width:0;
+background:#00ffe1;
+animation:load 2s linear forwards;
+}
+
+@keyframes load{
+to{width:100%;}
+}
+
+canvas{
+border:1px solid #00ffe1;
+margin-top:20px;
+background:black;
+box-shadow:0 0 20px #00ffe1;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Access -->
+
+<div id="access" style="text-align:center;padding:200px">
+
+<h1>LEMMA Research Lab</h1>
+<p>접근하시겠습니까?</p>
+
+<button onclick="enter()">YES</button>
+
+</div>
+
+<!-- Connecting -->
+
+<div id="connecting" class="connecting" style="display:none">
+
+CONNECTING...
+<div class="loader"><div class="bar"></div></div>
+
+</div>
+
+<div id="main" style="display:none">
+
+<header>
+
+<div onclick="location.reload()" style="cursor:pointer">LEMMA</div>
+
+<nav>
+
+<span onclick="openField('physics')">Physics</span>
+<span onclick="openField('chemistry')">Chemistry</span>
+<span onclick="openField('biology')">Biology</span>
+<span onclick="openField('math')">Math</span>
+
+<input id="search" placeholder="Search">
+
+</nav>
+
+</header>
+
+<!-- Menu -->
+
+<div id="divisionMenu" style="text-align:center;padding:100px">
+
+<h1>Research Division</h1>
+
+<div class="divisionGrid">
+
+<div class="divisionCard" onclick="openField('physics')">
+PHYSICS
+<p>Quantum • Optics • Semiconductor</p>
+</div>
+
+<div class="divisionCard" onclick="openField('chemistry')">
+CHEMISTRY
+<p>Synthesis • Molecular • Photochemistry</p>
+</div>
+
+<div class="divisionCard" onclick="openField('biology')">
+BIOLOGY
+<p>Genomics • Bioinformatics</p>
+</div>
+
+<div class="divisionCard" onclick="openField('math')">
+MATHEMATICS
+<p>Game Theory • Modeling</p>
+</div>
+
+</div>
+</div>
+
+<!-- Physics -->
+
+<div id="physics" class="section">
+
+<h2>Physics Research Division</h2>
+
+<h3>Week 3 — Semiconductor Band Gap Analysis</h3>
+
+<p>
+
+본 연구에서는 반도체 물리학의 핵심 개념인 Band Gap Energy를 실험적으로 분석한다.
+고체 상태의 원자들은 서로 상호작용하며 전자 궤도가 겹치면서 연속적인 에너지 밴드를 형성한다.
+이때 전자가 존재할 수 있는 영역은 크게 Valence Band와 Conduction Band로 나뉘며
+두 밴드 사이의 에너지 차이를 Band Gap(Eg)라고 한다.
+
+LED는 PN 접합 반도체 구조를 가지며 일정 전압 이상이 인가될 때
+전도대의 전자가 정공과 재결합하며 광자를 방출한다.
+
+이때 방출되는 광자의 에너지는 다음 관계를 따른다.
+
+E = hν = hc / λ
+
+또한 LED의 문턱 전압과 밴드갭 에너지 사이에는 다음 근사 관계가 성립한다.
+
+Eg ≈ eVthreshold
+
+본 실험에서는 다양한 파장의 LED에 대해 문턱 전압을 측정하고
+이를 이용해 밴드갭 에너지를 계산한다.
+
+실험 목적
+
+반도체 접합부의 에너지 장벽과 광전자 방출의 상관관계를 물리적으로 규명하고,
+LED의 문턱 전압 측정을 통해 고체 물리 이론의 핵심 파라미터인
+Band Gap Energy를 정량적으로 산출한다.
+
+</p>
+
+<canvas id="bandgapCanvas" width="600" height="300"></canvas>
+
+<h3>Week 4 — Young Double Slit Experiment</h3>
+
+<p>
+
+Young의 이중 슬릿 실험은 빛의 파동성을 증명한 대표적인 실험이다.
+
+단색 레이저가 두 개의 미세한 슬릿을 통과하면
+스크린 위에 밝고 어두운 간섭 무늬가 나타난다.
+
+간섭 무늬의 간격은 다음 관계를 따른다.
+
+Δy = λL / d
+
+λ : 빛의 파장  
+L : 슬릿과 스크린 사이 거리  
+d : 슬릿 사이 간격  
+
+실험에서는 레이저 포인터와 이중 슬릿을 이용해
+실제 간섭 패턴을 측정하고 이를 통해 파장을 계산한다.
+
+실험 목적
+
+파동의 이동과 간섭 현상을 가시적으로 관찰하고
+빛이 입자이면서 동시에 파동이라는
+양자 물리학적 성질을 실험적으로 이해한다.
+
+</p>
+
+</div>
+
+<!-- Chemistry -->
+
+<div id="chemistry" class="section">
+
+<h2>Chemical Synthesis Division</h2>
+
+<h3>Week 2 — High Purity Aspirin Synthesis</h3>
+
+<p>
+
+본 실험에서는 살리실산(Salicylic Acid)과
+아세트산 무수물(Acetic Anhydride)의 에스테르화 반응을 이용하여
+아세틸살리실산(Acetylsalicylic Acid, Aspirin)을 합성한다.
+
+반응식
+
+Salicylic Acid + Acetic Anhydride → Aspirin + Acetic Acid
+
+촉매로 인산(H₃PO₄)을 사용하여 반응 속도를 증가시키며
+반응 후 생성된 고체는 재결정(Recrystallization)을 통해 정제한다.
+
+재결정 과정에서는 온도에 따른 용해도 차이를 이용하여
+불순물을 제거하고 결정의 순도를 향상시킨다.
+
+본 프로젝트에서는 단순 합성에 그치지 않고
+간이 HPLC 원리를 응용한 순도 측정 장치를 제작한다.
+
+LED 광원과 RGB 광센서를 이용한 간이 분광 시스템을 구축하고
+Beer–Lambert Law를 이용해 흡광도 데이터를 분석한다.
+
+검정 곡선을 통해 합성된 아스피린의 순도를 정량적으로 계산한다.
+
+실험 목적
+
+고순도의 합성물을 추출하고
+직접 제작한 간이 분석 장치를 이용하여
+합성된 화합물의 순도를 정량적으로 측정한다.
+
+</p>
+
+<h3>Advanced Study — Azobenzene Photoisomerization</h3>
+
+<p>
+
+심화 연구에서는 아조벤젠(Azobenzene)의 광이성질화 반응을 연구한다.
+
+아조벤젠은 자외선을 흡수하면
+trans 구조에서 cis 구조로 변환되는 특징을 가진다.
+
+이 과정은 π → π* 전자 전이에 의해 발생하며
+분자의 기하학적 구조 변화와 함께
+광학적 특성이 변화한다.
+
+이러한 분자 스위치는
+광학 데이터 저장, 스마트 소재,
+나노 분자 기계 등에 응용된다.
+
+</p>
+
+<canvas id="atomCanvas" width="400" height="400"></canvas>
+
+</div>
+
+<!-- Biology -->
+
+<div id="biology" class="section">
+
+<h2>Bioinformatics Division</h2>
+
+<h3>Week 5–7 — Hydra Regeneration Genomics</h3>
+
+<p>
+
+본 연구는 히드라(Hydra)의 재생 능력과
+인간 노화 유전자 사이의 유전체적 연관성을 분석하는
+생물정보학 프로젝트이다.
+
+히드라는 지속적인 줄기세포 분열을 통해
+생물학적 노화가 거의 발생하지 않는 생물로 알려져 있다.
+
+연구에서는 NCBI 및 Ensembl 데이터베이스에서
+Hydra vulgaris 유전체 데이터를 수집한다.
+
+이후 Python 기반 생물정보학 라이브러리(BioPython)를 이용해
+
+• 서열 정렬  
+• motif 탐색  
+• 유전자 상동성 분석  
+
+을 수행한다.
+
+특히 재생 관련 유전자에서 발견되는 motif 패턴이
+인간 노화 관련 유전자에서도 보존되는지 분석한다.
+
+연구 목적
+
+심해 히드라의 재생 특이적 모티프와
+인간 노화 유전체 데이터의 다각적 매핑을 통해
+영생 유전자의 보존성과 발현 제어 메커니즘 사이의
+상관관계를 분석한다.
+
+</p>
+
+<div id="dnaContainer"></div>
+
+</div>
+
+<!-- Math -->
+
+<div id="math" class="section">
+
+<h2>Mathematical Modeling Division</h2>
+
+<h3>Week 8 — Nim Game Strategy</h3>
+
+<p>
+
+님 게임(Nim Game)은 조합 게임 이론의 대표적인 예이다.
+
+게임은 여러 개의 돌 더미에서 번갈아 돌을 가져가는 방식으로 진행된다.
+
+모든 더미의 돌 개수를 이진수로 표현한 뒤
+XOR 연산을 수행하면 게임의 상태를 판단할 수 있다.
+
+이를 Nim-Sum이라 한다.
+
+Nim-Sum = 0 → 패배 상태  
+Nim-Sum ≠ 0 → 승리 상태  
+
+학생들은 다양한 초기 조건에서 Nim-Sum을 계산하고
+최적의 승리 전략을 탐구한다.
+
+</p>
+
+<h3>Week 9 — Quadratic Physics Engine</h3>
+
+<p>
+
+이 프로젝트에서는 이차 함수 그래프를 이용하여
+브라우저 기반 물리 시뮬레이션을 구현한다.
+
+포물선 운동은 다음과 같은 방정식으로 표현된다.
+
+y = ax² + bx + c
+
+초기 속도와 중력 가속도를 변수로 설정하여
+물체의 궤적을 계산하고
+브라우저에서 실시간으로 시각화한다.
+
+이를 통해 수학적 모델링과
+물리 시뮬레이션 사이의 관계를 이해한다.
+
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+/* access */
+
+function enter(){
+
+document.getElementById("access").style.display="none"
+
+document.getElementById("connecting").style.display="flex"
+
+setTimeout(()=>{
+
+document.getElementById("connecting").style.display="none"
+
+document.getElementById("main").style.display="block"
+
+bandgapAnimation()
+atomAnimation()
+createDNA()
+
+},2000)
+
+}
+
+/* menu */
+
+function openField(field){
+
+document.getElementById("connecting").style.display="flex"
+
+setTimeout(()=>{
+
+document.getElementById("connecting").style.display="none"
+
+document.getElementById("divisionMenu").style.display="none"
+
+document.querySelectorAll(".section").forEach(s=>s.style.display="none")
+
+document.getElementById(field).style.display="block"
+
+},1500)
+
+}
+
+/* bandgap */
+
+function bandgapAnimation(){
+
+let canvas=document.getElementById("bandgapCanvas")
+let ctx=canvas.getContext("2d")
+
+let t=0
+
+setInterval(()=>{
+
+ctx.clearRect(0,0,600,300)
+
+let gap=80+Math.sin(t)*20
+
+ctx.fillStyle="#00ffe1"
+
+ctx.fillRect(100,80,400,10)
+
+ctx.fillRect(100,80+gap,400,10)
+
+ctx.beginPath()
+
+ctx.arc(300,80+gap/2,8,0,Math.PI*2)
+
+ctx.fill()
+
+t+=0.05
+
+},40)
+
+}
+
+/* atom */
+
+function atomAnimation(){
+
+let canvas=document.getElementById("atomCanvas")
+let ctx=canvas.getContext("2d")
+
+let angle=0
+
+setInterval(()=>{
+
+ctx.clearRect(0,0,400,400)
+
+let cx=200
+let cy=200
+
+ctx.fillStyle="red"
+
+ctx.beginPath()
+ctx.arc(cx,cy,10,0,Math.PI*2)
+ctx.fill()
+
+ctx.strokeStyle="#00ffe1"
+
+ctx.beginPath()
+ctx.arc(cx,cy,80,0,Math.PI*2)
+ctx.stroke()
+
+let x=cx+80*Math.cos(angle)
+let y=cy+80*Math.sin(angle)
+
+ctx.fillStyle="cyan"
+
+ctx.beginPath()
+ctx.arc(x,y,5,0,Math.PI*2)
+ctx.fill()
+
+angle+=0.05
+
+},30)
+
+}
+
+/* DNA */
+
+function createDNA(){
+
+let scene=new THREE.Scene()
+
+let camera=new THREE.PerspectiveCamera(75,1,0.1,1000)
+
+let renderer=new THREE.WebGLRenderer()
+
+renderer.setSize(400,400)
+
+document.getElementById("dnaContainer").appendChild(renderer.domElement)
+
+let geometry=new THREE.SphereGeometry(0.1,16,16)
+
+let material=new THREE.MeshBasicMaterial({color:0x00ffe1})
+
+for(let i=0;i<60;i++){
+
+let sphere=new THREE.Mesh(geometry,material)
+
+let angle=i*0.3
+
+sphere.position.x=Math.cos(angle)
+sphere.position.y=i*0.1
+sphere.position.z=Math.sin(angle)
+
+scene.add(sphere)
+
+}
+
+camera.position.z=5
+
+function animate(){
+
+requestAnimationFrame(animate)
+
+scene.rotation.y+=0.01
+
+renderer.render(scene,camera)
+
+}
+
+animate()
+
+}
+
+
+</script>
+
+<script>
+
+/* 검색 쿠키 시스템 */
+
+window.addEventListener("DOMContentLoaded", function(){
+
+let searchInput = document.getElementById("search");
+
+if(!searchInput) return;
+
+searchInput.addEventListener("keydown", function(e){
+
+if(e.key === "Enter"){
+
+let code = searchInput.value.trim();
+
+/* π secret */
+
+if(code === "3141"){
+
+document.getElementById("connecting").style.display="flex";
+
+setTimeout(function(){
+
+window.location.href="secret.html";
+
+},1500);
+
+}
+
+/* Ramanujan number */
+
+else if(code === "1729"){
+
+alert("TAXICAB NUMBER DETECTED");
+
+}
+
+/* speed of light */
+
+else if(code === "299792458"){
+
+alert("LIGHT SPEED ACCESS");
+
+}
+
+/* AI lab */
+
+else if(code === "42"){
+
+alert("AI LAB ACCESS");
+
+}
+
+}
+
+});
+
+});
+
+
+
+</script>
+</body>
+
+</html>
